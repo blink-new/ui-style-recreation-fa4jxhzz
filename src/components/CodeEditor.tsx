@@ -1,5 +1,20 @@
 import React, { useState } from 'react';
-import { ChevronRight, ChevronDown, Home, Code, FolderOpen, Play, Paperclip, Save, FileText, X, Plus, Trash2 } from 'lucide-react';
+import { 
+  ChevronRight, 
+  ChevronDown, 
+  Home, 
+  Code, 
+  FolderOpen, 
+  Play, 
+  Paperclip, 
+  Save, 
+  FileText, 
+  X, 
+  Plus, 
+  Trash2,
+  Settings,
+  FileOpen
+} from 'lucide-react';
 
 interface FileItem {
   id: string;
@@ -125,20 +140,20 @@ ColorsButton.MouseButton1Click:Connect(function()
 
   const renderSyntaxHighlighting = (code: string) => {
     return code
-      .replace(/\b(function|local|elseif|then|end|for|in|pairs|do|if)\b/g, '<span style="color: #4FC3F7;">$1</span>')
-      .replace(/\b(updateColors|MouseButton1Click|Connect|TextColor3|ScrollBarImageColor3)\b/g, '<span style="color: #FFB74D;">$1</span>')
-      .replace(/\b(color|ctype|text1|text2|scroll|currentText1|currentText2|currentScroll|currentShade1|currentShade2|cache_currentShade1|cache_currentShade2|colorpickerOpen|ColorsButton|i|v)\b/g, '<span style="color: #E8E8E8;">$1</span>')
-      .replace(/(".*?")/g, '<span style="color: #A5D6A7;">$1</span>')
-      .replace(/(==|=)/g, '<span style="color: #81C784;">$1</span>')
-      .replace(/\b(false|true)\b/g, '<span style="color: #FFB74D;">$1</span>')
-      .replace(/\b(\d+)\b/g, '<span style="color: #FFB74D;">$1</span>');
+      .replace(/\b(function|local|elseif|then|end|for|in|pairs|do|if)\b/g, '<span style="color: #569cd6;">$1</span>')
+      .replace(/\b(updateColors|MouseButton1Click|Connect|TextColor3|ScrollBarImageColor3)\b/g, '<span style="color: #4ec9b0;">$1</span>')
+      .replace(/\b(color|ctype|text1|text2|scroll|currentText1|currentText2|currentScroll|currentShade1|currentShade2|cache_currentShade1|cache_currentShade2|colorpickerOpen|ColorsButton|i|v)\b/g, '<span style="color: #d4d4d4;">$1</span>')
+      .replace(/(".*?")/g, '<span style="color: #ce9178;">$1</span>')
+      .replace(/(==|=)/g, '<span style="color: #d4d4d4;">$1</span>')
+      .replace(/\b(false|true)\b/g, '<span style="color: #569cd6;">$1</span>')
+      .replace(/\b(\d+)\b/g, '<span style="color: #b5cea8;">$1</span>');
   };
 
   const renderFileTree = (items: FileItem[], depth = 0) => {
     return items.map((item) => (
       <div key={item.id} className="select-none">
         <div 
-          className="flex items-center py-0.5 px-2 hover:bg-gray-700 cursor-pointer text-sm"
+          className="flex items-center py-0.5 px-2 hover:bg-[#2a2d2e] cursor-pointer text-sm"
           style={{ paddingLeft: `${depth * 16 + 8}px` }}
         >
           {item.type === 'folder' && (
@@ -147,11 +162,11 @@ ColorsButton.MouseButton1Click:Connect(function()
             </span>
           )}
           {item.type === 'folder' ? (
-            <FolderOpen className="w-3 h-3 mr-2 text-gray-400" />
+            <FolderOpen className="w-4 h-4 mr-2 text-[#dcb67a]" />
           ) : (
-            <FileText className="w-3 h-3 mr-2 text-gray-400" />
+            <FileText className="w-4 h-4 mr-2 text-[#519aba]" />
           )}
-          <span className="text-gray-300">{item.name}</span>
+          <span className="text-[#cccccc]">{item.name}</span>
         </div>
         {item.type === 'folder' && !item.collapsed && item.children && (
           <div>
@@ -166,37 +181,40 @@ ColorsButton.MouseButton1Click:Connect(function()
   const codeLines = currentTab ? parseCodeLines(currentTab.content) : [];
 
   return (
-    <div className="w-full h-screen bg-[#1E1E1E] flex flex-col font-mono text-sm">
+    <div className="w-full h-screen bg-[#1e1e1e] flex flex-col font-mono text-sm overflow-hidden">
       <div className="flex h-full">
         {/* Left Sidebar */}
-        <div className="w-12 bg-[#2D2D30] border-r border-[#3E3E42] flex flex-col items-center py-3">
-          <div className="p-2 rounded hover:bg-[#3E3E42] cursor-pointer mb-2">
-            <Home className="w-5 h-5 text-gray-400" />
+        <div className="w-12 bg-[#333333] border-r border-[#464647] flex flex-col items-center py-3">
+          <div className="p-2 rounded hover:bg-[#464647] cursor-pointer mb-2">
+            <Home className="w-5 h-5 text-[#cccccc]" />
           </div>
-          <div className="p-2 rounded bg-[#0E639C] cursor-pointer">
+          <div className="p-2 rounded bg-[#007acc] cursor-pointer mb-2">
             <Code className="w-5 h-5 text-white" />
+          </div>
+          <div className="mt-auto p-2 rounded hover:bg-[#464647] cursor-pointer">
+            <Settings className="w-5 h-5 text-[#cccccc]" />
           </div>
         </div>
 
         {/* Main Editor Area */}
         <div className="flex-1 flex flex-col">
           {/* Tab Bar */}
-          <div className="bg-[#2D2D30] border-b border-[#3E3E42] flex items-center">
+          <div className="bg-[#2d2d30] border-b border-[#464647] flex items-center">
             {tabs.map((tab) => (
               <div
                 key={tab.id}
-                className={`px-4 py-2 border-r border-[#3E3E42] flex items-center cursor-pointer hover:bg-[#3E3E42] ${
-                  tab.isActive ? 'bg-[#1E1E1E] text-white' : 'bg-[#2D2D30] text-gray-400'
+                className={`px-4 py-2 border-r border-[#464647] flex items-center cursor-pointer hover:bg-[#1e1e1e] ${
+                  tab.isActive ? 'bg-[#1e1e1e] text-[#cccccc]' : 'bg-[#2d2d30] text-[#969696]'
                 }`}
                 onClick={() => setActiveTab(tab.id)}
               >
                 <span className="mr-2">{tab.name}</span>
-                {tab.isModified && <span className="text-gray-400 mr-2">*</span>}
-                <X className="w-3 h-3 text-gray-400 hover:text-white" />
+                {tab.isModified && <span className="text-[#969696] mr-2">*</span>}
+                <X className="w-3 h-3 text-[#969696] hover:text-[#cccccc]" />
               </div>
             ))}
-            <div className="px-2 py-2 cursor-pointer hover:bg-[#3E3E42]">
-              <Plus className="w-4 h-4 text-gray-400" />
+            <div className="px-2 py-2 cursor-pointer hover:bg-[#1e1e1e]">
+              <Plus className="w-4 h-4 text-[#969696]" />
             </div>
           </div>
 
@@ -205,20 +223,20 @@ ColorsButton.MouseButton1Click:Connect(function()
             {/* Code Editor */}
             <div className="flex-1 flex">
               {/* Line Numbers & Folding */}
-              <div className="bg-[#1E1E1E] border-r border-[#3E3E42] flex">
+              <div className="bg-[#1e1e1e] border-r border-[#464647] flex">
                 {/* Folding Column */}
                 <div className="w-6 py-3 text-center">
                   {codeLines.map((line, index) => (
-                    <div key={index} className="h-[18px] flex items-center justify-center">
+                    <div key={index} className="h-[19px] flex items-center justify-center">
                       {line.isFoldable && (
                         <button
                           onClick={() => toggleFold(line.number)}
-                          className="w-3 h-3 flex items-center justify-center hover:bg-[#3E3E42] rounded"
+                          className="w-3 h-3 flex items-center justify-center hover:bg-[#464647] rounded"
                         >
                           {line.isFolded ? (
-                            <ChevronRight className="w-2 h-2 text-gray-500" />
+                            <ChevronRight className="w-2 h-2 text-[#969696]" />
                           ) : (
-                            <ChevronDown className="w-2 h-2 text-gray-500" />
+                            <ChevronDown className="w-2 h-2 text-[#969696]" />
                           )}
                         </button>
                       )}
@@ -227,9 +245,9 @@ ColorsButton.MouseButton1Click:Connect(function()
                 </div>
 
                 {/* Line Numbers */}
-                <div className="px-3 py-3 text-gray-500 text-right min-w-[60px]">
+                <div className="px-3 py-3 text-[#858585] text-right min-w-[60px]">
                   {codeLines.map((line, index) => (
-                    <div key={index} className="h-[18px] leading-[18px] text-[13px]">
+                    <div key={index} className="h-[19px] leading-[19px] text-[13px]">
                       {line.number}
                     </div>
                   ))}
@@ -237,10 +255,10 @@ ColorsButton.MouseButton1Click:Connect(function()
               </div>
 
               {/* Code Area */}
-              <div className="flex-1 bg-[#1E1E1E] py-3 px-4 overflow-auto">
-                <div className="text-gray-300 leading-[18px] text-[13px]">
+              <div className="flex-1 bg-[#1e1e1e] py-3 px-4 overflow-auto">
+                <div className="text-[#d4d4d4] leading-[19px] text-[13px]">
                   {codeLines.map((line, index) => (
-                    <div key={index} className="h-[18px] whitespace-pre">
+                    <div key={index} className="h-[19px] whitespace-pre">
                       {!line.isFolded && (
                         <span 
                           dangerouslySetInnerHTML={{ 
@@ -255,9 +273,9 @@ ColorsButton.MouseButton1Click:Connect(function()
             </div>
 
             {/* File Explorer */}
-            <div className="w-64 bg-[#252526] border-l border-[#3E3E42]">
-              <div className="p-3 border-b border-[#3E3E42]">
-                <div className="flex items-center text-gray-300 font-medium text-[13px]">
+            <div className="w-64 bg-[#252526] border-l border-[#464647]">
+              <div className="p-3 border-b border-[#464647]">
+                <div className="flex items-center text-[#cccccc] font-medium text-[13px]">
                   <FolderOpen className="w-4 h-4 mr-2" />
                   Scripts
                 </div>
@@ -269,28 +287,28 @@ ColorsButton.MouseButton1Click:Connect(function()
           </div>
 
           {/* Bottom Toolbar */}
-          <div className="bg-[#2D2D30] border-t border-[#3E3E42] flex items-center justify-between px-4 py-2">
+          <div className="bg-[#2d2d30] border-t border-[#464647] flex items-center justify-between px-4 py-2">
             <div className="flex items-center space-x-1">
-              <button className="flex items-center space-x-2 px-3 py-1 rounded hover:bg-[#3E3E42] text-gray-300 text-[13px]">
+              <button className="flex items-center space-x-2 px-3 py-1 rounded hover:bg-[#464647] text-[#cccccc] text-[13px]">
                 <Paperclip className="w-4 h-4" />
                 <span>Attach</span>
               </button>
-              <button className="flex items-center space-x-2 px-3 py-1 rounded hover:bg-[#3E3E42] text-gray-300 text-[13px]">
+              <button className="flex items-center space-x-2 px-3 py-1 rounded hover:bg-[#464647] text-[#cccccc] text-[13px]">
                 <Play className="w-4 h-4" />
                 <span>Execute</span>
               </button>
             </div>
 
             <div className="flex items-center space-x-1">
-              <button className="flex items-center space-x-2 px-3 py-1 rounded hover:bg-[#3E3E42] text-gray-300 text-[13px]">
-                <FolderOpen className="w-4 h-4" />
+              <button className="flex items-center space-x-2 px-3 py-1 rounded hover:bg-[#464647] text-[#cccccc] text-[13px]">
+                <FileOpen className="w-4 h-4" />
                 <span>Open File</span>
               </button>
-              <button className="flex items-center space-x-2 px-3 py-1 rounded hover:bg-[#3E3E42] text-gray-300 text-[13px]">
+              <button className="flex items-center space-x-2 px-3 py-1 rounded hover:bg-[#464647] text-[#cccccc] text-[13px]">
                 <Save className="w-4 h-4" />
                 <span>Save File</span>
               </button>
-              <button className="flex items-center space-x-2 px-3 py-1 rounded hover:bg-[#3E3E42] text-gray-300 text-[13px]">
+              <button className="flex items-center space-x-2 px-3 py-1 rounded hover:bg-[#464647] text-[#cccccc] text-[13px]">
                 <Trash2 className="w-4 h-4" />
                 <span>Clear</span>
               </button>
