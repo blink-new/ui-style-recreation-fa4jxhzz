@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
-import { 
-  ChevronRight, 
-  ChevronDown, 
-  Home, 
-  Code, 
-  FolderOpen, 
-  Play, 
-  Paperclip, 
-  Save, 
-  FileText, 
-  X, 
-  Plus, 
+import {
+  ChevronRight,
+  ChevronDown,
+  Home,
+  Code,
+  FolderOpen,
+  Play,
+  Paperclip,
+  Save,
+  FileText,
+  X,
+  Plus,
   Trash2,
   Settings,
-  FileOpen
+  File
 } from 'lucide-react';
 
+// Represents a file or folder in the file explorer
 interface FileItem {
   id: string;
   name: string;
@@ -25,6 +26,7 @@ interface FileItem {
   collapsed?: boolean;
 }
 
+// Represents a tab in the editor
 interface Tab {
   id: string;
   name: string;
@@ -33,6 +35,7 @@ interface Tab {
   isActive: boolean;
 }
 
+// Represents a line of code with folding info
 interface LineInfo {
   number: number;
   content: string;
@@ -42,9 +45,13 @@ interface LineInfo {
 }
 
 const CodeEditor: React.FC = () => {
+  // Active tab id
   const [activeTab, setActiveTab] = useState<string>('tab1');
+
+  // Set of folded line numbers
   const [foldedLines, setFoldedLines] = useState<Set<number>>(new Set([3300, 3308, 3314, 3322]));
-  
+
+  // Tabs data
   const [tabs] = useState<Tab[]>([
     {
       id: 'tab1',
@@ -74,6 +81,7 @@ ColorsButton.MouseButton1Click:Connect(function()
     }
   ]);
 
+  // File explorer data
   const [files] = useState<FileItem[]>([
     {
       id: 'scripts',
@@ -105,6 +113,7 @@ ColorsButton.MouseButton1Click:Connect(function()
     }
   ]);
 
+  // Toggle folding state for a line
   const toggleFold = (lineNumber: number) => {
     setFoldedLines(prev => {
       const newSet = new Set(prev);
@@ -117,17 +126,19 @@ ColorsButton.MouseButton1Click:Connect(function()
     });
   };
 
+  // Parse code content into lines with folding info
   const parseCodeLines = (content: string): LineInfo[] => {
     const lines = content.split('\n');
     const baseLineNumber = 3284;
-    
+
     return lines.map((line, index) => {
       const lineNumber = baseLineNumber + index;
       const trimmedLine = line.trim();
       const indentLevel = (line.length - line.trimStart().length) / 4;
-      
-      const isFoldable = trimmedLine.includes('elseif') || trimmedLine.includes('for') || trimmedLine.includes('function') || trimmedLine.includes('Connect(');
-      
+
+      // Lines with these keywords are foldable
+      const isFoldable = ['elseif', 'for', 'function', 'Connect('].some(keyword => trimmedLine.includes(keyword));
+
       return {
         number: lineNumber,
         content: line,
@@ -138,6 +149,7 @@ ColorsButton.MouseButton1Click:Connect(function()
     });
   };
 
+  // Simple syntax highlighting for Lua-like code
   const renderSyntaxHighlighting = (code: string) => {
     return code
       .replace(/\b(function|local|elseif|then|end|for|in|pairs|do|if)\b/g, '<span style="color: #569cd6;">$1</span>')
@@ -149,10 +161,11 @@ ColorsButton.MouseButton1Click:Connect(function()
       .replace(/\b(\d+)\b/g, '<span style="color: #b5cea8;">$1</span>');
   };
 
+  // Render file tree recursively
   const renderFileTree = (items: FileItem[], depth = 0) => {
     return items.map((item) => (
       <div key={item.id} className="select-none">
-        <div 
+        <div
           className="flex items-center py-0.5 px-2 hover:bg-[#2a2d2e] cursor-pointer text-sm"
           style={{ paddingLeft: `${depth * 16 + 8}px` }}
         >
@@ -260,9 +273,9 @@ ColorsButton.MouseButton1Click:Connect(function()
                   {codeLines.map((line, index) => (
                     <div key={index} className="h-[19px] whitespace-pre">
                       {!line.isFolded && (
-                        <span 
-                          dangerouslySetInnerHTML={{ 
-                            __html: renderSyntaxHighlighting(line.content) 
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: renderSyntaxHighlighting(line.content)
                           }}
                         />
                       )}
@@ -301,7 +314,7 @@ ColorsButton.MouseButton1Click:Connect(function()
 
             <div className="flex items-center space-x-1">
               <button className="flex items-center space-x-2 px-3 py-1 rounded hover:bg-[#464647] text-[#cccccc] text-[13px]">
-                <FileOpen className="w-4 h-4" />
+                <File className="w-4 h-4" />
                 <span>Open File</span>
               </button>
               <button className="flex items-center space-x-2 px-3 py-1 rounded hover:bg-[#464647] text-[#cccccc] text-[13px]">
